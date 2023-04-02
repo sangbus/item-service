@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-
+/**
+ * url에 해당하는 단어가 있으면 커넥 시켜주는 클래스
+ * */
 @Controller
 @RequestMapping("/basic/items")
 @RequiredArgsConstructor
@@ -102,7 +104,7 @@ public class BasicItemController {
     {
         Item savedItem = itemRepository.save(item);
         redirectAttributes.addAttribute("itemId",savedItem.getId());
-        redirectAttributes.addAttribute("status",true);
+        redirectAttributes.addAttribute("addStatus",true);
         return "redirect:/basic/items/{itemId}";
     }
 
@@ -114,8 +116,10 @@ public class BasicItemController {
         return "basic/editForm";
     }
     @PostMapping("/{itemId}/edit")
-    public String edit(@PathVariable Long itemId, @ModelAttribute Item item){
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item, RedirectAttributes redirectAttributes){
         itemRepository.update(itemId,item);
+        redirectAttributes.addAttribute("itemId",itemId);
+        redirectAttributes.addAttribute("editStatus",true);
         return "redirect:/basic/items/{itemId}"; // 상품 상세 페이지 재호출
         // 리다이렉트에 대해 HTTP 수업에서 자세히 다뤘다고 하는데 기억이 안 남
     }
